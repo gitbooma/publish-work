@@ -11,7 +11,7 @@ echo "IMAGES: $IMAGES"
 for IMAGE in $IMAGES; do
     echo "IMAGE: $IMAGE"
     
-    NAME=$(basename).$(docker inspect --format '{{ index .Config.Labels "name" }}' $IMAGE)
+    NAME=$(basename ${DOCKERHUB_USERNAME}).$(docker inspect --format '{{ index .Config.Labels "name" }}' $IMAGE)
     TAG="$DOCKERHUB_USERNAME/$NAME:$VERSION"
 
     docker tag $IMAGE $TAG
