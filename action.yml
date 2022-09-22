@@ -6,12 +6,14 @@ branding:
   icon: "database"
   color: "red"
 inputs:
-  version:
-    description: "Release version (tag)"
-    required: false
-    default: ''
   docker_compose:
     description: "docker-compose file to build and publish images from"
+    required: true
+  image:
+    description: "image name"
+    required: true
+  tags:
+    description: "comes from docker meta"
     required: true
   #repo_token: 
    # description: "Github Repo token"
@@ -24,18 +26,18 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - id: tag
-      run: |
+    #- id: tag
+     # run: |
         # if VERSION is not set, get it from git repo
-        VERSION="${{ inputs.version }}"
-        if [ -z "$VERSION" ]; then
-            VERSION=$(${{ github.action_path }}/src/version.sh)
-        fi
-        echo "VERSION: $VERSION"
-        echo "::set-output name=semver::$(echo $VERSION)"
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
-      shell: bash
+    #    VERSION="${{ inputs.version }}"
+     #   if [ -z "$VERSION" ]; then
+      #      VERSION=$(${{ github.action_path }}/src/version.sh)
+       # fi
+     #   echo "VERSION: $VERSION"
+      #  echo "::set-output name=semver::$(echo $VERSION)"
+       # echo "VERSION=$VERSION" >> $GITHUB_ENV
+   #   shell: bash
     - id: publish
      # run: ${{ github.action_path }}/src/publish.sh $VERSION ${{ inputs.docker_compose }} ${{ inputs.repo_token }}
-      run: ${{ github.action_path }}/src/publish.sh $VERSION ${{ inputs.docker_compose }}
+      run: ${{ github.action_path }}/src/publish.sh ${{ inputs.docker_compose }} ${{ inputs.image }} ${{ inputs.tags }}
       shell: bash
